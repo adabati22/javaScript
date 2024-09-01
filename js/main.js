@@ -1,56 +1,129 @@
 
-// grados celsius a farenheit
+//-----Ecomerce---///
 
-function  conversion (grados) {
-    let farenheit = grados *  9/5 
-    let resultado = farenheit + 32;
-    return alert ("Su temperatura es de " + resultado + "º farenheit" )
- }
- 
-if(confirm("¿queres convertir celsius a farenheit")){
+const contenidoTienda= document.getElementById("tienda");
+const Carro = document.getElementById("buyitem");
+const carritocont= document.getElementById("CarritoCont")
+//----PRODUCTOS----//
+const Productos=[
+    {
+        id: 1,
+        nombre:"Huevos(x6)",
+        precio:500 ,
+        img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZtmNvTLpYqbnQ-VS7cYvPB6De1S_Lcb2nrA&s",
+    },
+    {
+        id: 2,
+        nombre:"Azucar ",
+        precio:800 ,
+        img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf0hNmzl6Gg8BIUDeY5-E1-uBpMgHqCNSKtA&s",
+    },
+    {
+        id: 3,
+        nombre:"Harina",
+        precio:400 ,
+        img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPWv6I4TF_HmhuFO85JWSrcOhn7lDpO3uFtg&s",
+    },
+    {
+        id: 4,
+        nombre:"Galletas",
+        precio:1500 ,
+        img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9UfaRoKp5skS13ANjLKV6jybeANL9xbDDqA&s",
+    },
+    {
+        id: 5,
+        nombre:"Pan",
+        precio:700 ,
+        img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLpWDvNzRRIqH_NPQB8jTPBC5mnzF1E8SV2Q&s",
+    }
     
-    let celsius= prompt ("ingrese la temperatura en grados Celsius")
-    conversion(celsius)
- 
+];
 
-}
-else{
-    alert("gracias por tu visita")
+let carrito= JSON.parse(localStorage.getItem("compraUsuario"))|| [];
+//----AGREGAR PRODUCTOS------//
+Productos.forEach((product)=>
+{let contenedor = document.createElement ("div");
+contenedor.innerHTML=`
+    <img src="${product.img}">
+    <h3>${product.nombre}</h3>
+    <p> ${product.precio} $ </h3>
+`
+;
+
+contenidoTienda.append(contenedor);
+
+const agregar= document.createElement ("button");
+agregar.innerText= "Agregar";
+contenedor.append(agregar);
+agregar.addEventListener("click", () => {
+carrito.push({
+    id: product.id,
+    img: product.img,
+    nombre: product.nombre,
+    precio: product.precio,
+});
+console.log(carrito)
+LocalS()
+
+});
+
+} )
+
+//-------------CARRITO----------//
+const mostrarCarrito= ()=>{
+    carritocont.style.display="flex";
+    carritocont.innerHTML=``;
+//--modal Header---//
+    const modal= document.createElement("div");
+    modal.className="modal"
+    modal.innerHTML=`
+        <h2> Mi Compra </h2>
+        <h2> X </h2>`;
+    carritocont.append(modal)
+    modal.addEventListener("click", ()=>{
+    carritocont.style.display="none";
+   })
+   
+    carrito.forEach((product)=>{
+        let Compras= document.createElement("div");
+        Compras.className="Compras"
+        Compras.innerHTML=`
+        <img src="${product.img}">
+        <h3>${product.nombre}</h3>
+        <p> ${product.precio} $ </h3>
+        `
+       carritocont.append(Compras)
+//--- eliminar productos--//
+       const eliminar = document.createElement("button")
+       eliminar.innerText=`X`
+       Compras.append(eliminar)
+       eliminar.addEventListener("click",eliminarProducto);
+       
+    });
+
+   const gasto= carrito.reduce((acc,el)=> acc + el.precio,0);
+
+    const totalCompra= document.createElement("div");
+    totalCompra.className="total"
+    totalCompra.innerHTML=`
+    <p>Total: ${gasto} $</p>
+     <button> Iniciar Compra </button>
+    `;
+    carritocont.append(totalCompra);
+  
+
+};
+Carro.addEventListener("click", mostrarCarrito);
+
+const eliminarProducto= ()=>{
+    const hallarId = carrito.find((elemento) => elemento.id)
+    carrito = carrito.filter((carritoId)=>{
+        return carritoId !== hallarId;
+    } ) 
+mostrarCarrito()
+LocalS()
 }
 
-//conteo de pares e impares
-
-const numeros =[2,6,23,96,345,76,97,82,35,1 ]
-for (let i=0;i<numeros.length; i++){
-    if( numeros[i] % 2 ===0){
-        console.log(numeros[i] + " es par")
-    }
-    else{
-        console.log(numeros[i] + " es impar")
-    }
+//---LocalStorage---//
+const LocalS= ()=>{localStorage.setItem("compraUsuario", JSON.stringify(carrito));
 }
-//contar
-let contar = 1
-while(contar <= 50){
-    console.log(contar)
-    contar++
-}
-// edad para salir
-const datos =
-    {   
-        nombre:prompt("ingrese su nombre de pila"),
-        edad: prompt("ingrese su edad"),
-    }
-
-function mayor (nombre,edad){
-if( edad < 18){
-    alert (nombre + " estas chiquito para ir a boliche")
-}
-else if(edad >= 18 && edad <= 21) {
-    alert (nombre + " podes ingresar al boliches")
-}
-else {
-    alert ( nombre + " estas para ir a un bar ")
-}
-}
-mayor(datos.nombre, datos.edad)
