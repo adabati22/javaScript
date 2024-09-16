@@ -103,7 +103,7 @@ div{
 
     
 }
-
+/* Carrito Modal */
 
 .CarritoCont{
     position: fixed;
@@ -112,7 +112,7 @@ div{
     align-items: center;
     align-content: center;
     flex-direction: column;
-    transform: translateY(-1020px);
+    transform: translateY(-1400px);
     right: 0;
     background-color:rgb(192, 255, 194);
     padding-left: 20px;
@@ -142,9 +142,9 @@ div{
         font-size: 20px;
     }
     img{ 
-        width: 100px;
-        height: 100px;
-        margin-bottom: 20px;
+        width: 70px;
+        height: 70px;
+        margin-bottom: 5px;
     border-radius: 20px;}
     button{
         background-color:rgb(15, 166, 15);
