@@ -33,6 +33,7 @@ contenedor.innerHTML=`
     <img src="${product.img}">
     <h3>${product.nombre}</h3>
     <p> ${product.precio} $ </h3>
+    
 `
 ;
 
@@ -42,12 +43,22 @@ const agregar= document.createElement ("button");
 agregar.innerText= "Agregar";
 contenedor.append(agregar);
 agregar.addEventListener("click", () => {
+
+    const repetido=carrito.some((repeatProduct)=> repeatProduct.id === product.id)
+    if(repetido === true){
+        carrito.map((prod)=>{
+            if(prod.id ===product.id){
+                prod.cantidad++;
+            }
+        })
+    }else{
 carrito.push({
     id: product.id,
     img: product.img,
     nombre: product.nombre,
     precio: product.precio,
-});
+    cantidad: product.cantidad,
+})};
 LocalS()
 
 });
@@ -76,17 +87,20 @@ const mostrarCarrito= ()=>{
         <img src="${product.img}">
         <h3>${product.nombre}</h3>
         <p> ${product.precio} $ </h3>
-        `
-       carritocont.append(Compras)
-//--- eliminar productos--//
-       const eliminar = document.createElement("button")
-       eliminar.innerText=`X`
-       Compras.append(eliminar)
-       eliminar.addEventListener("click",eliminarProducto);
+        <p> ${product.cantidad}</p>
+        <button class="delete"> X </button>
+        `;
+       carritocont.append(Compras);
+//--- eliminar productos--// 
+       let Eliminar= Compras.querySelector(".delete");
+       Eliminar.addEventListener("click",()=>{
+       eliminarProducto(product.id)
+       }
+       )
        
     });
 //---total de la Compra---//
-   const gasto= carrito.reduce((acc,el)=> acc + el.precio,0);
+   const gasto= carrito.reduce((acc,el)=> acc + el.precio * el.cantidad,0);
 
     const totalCompra= document.createElement("div");
     totalCompra.className="total"
@@ -112,15 +126,16 @@ const mostrarCarrito= ()=>{
 }
 Carro.addEventListener("click", mostrarCarrito);
 
-const eliminarProducto= ()=>{
-    const hallarId = carrito.find((elemento) => elemento.id)
+
+const eliminarProducto= (id)=>{
+    const hallarId = carrito.find((elemento) => elemento.id === id)
     carrito = carrito.filter((carritoId)=>{
         return carritoId !== hallarId;
     } ) 
-mostrarCarrito()
+mostrarCarrito()}
 LocalS()
 
-}
+
 
 //---LocalStorage---//
 const LocalS= ()=>{localStorage.setItem("compraUsuario", JSON.stringify(carrito));
